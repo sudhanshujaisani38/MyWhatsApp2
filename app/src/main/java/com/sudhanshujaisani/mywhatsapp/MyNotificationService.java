@@ -19,12 +19,17 @@ public class MyNotificationService extends FirebaseMessagingService {
     public void onMessageReceived(RemoteMessage remoteMessage) {
         super.onMessageReceived(remoteMessage);
 
+        String notificationTitle=remoteMessage.getNotification().getTitle();
+        String notificationBody=remoteMessage.getNotification().getBody();
+        String sendersId=remoteMessage.getData().get("from_user_id");
+
         NotificationCompat.Builder builder=new NotificationCompat.Builder(this,channelId);
-        builder.setContentTitle("New Friend Request");
-        builder.setContentText("You have a new friend request");
+        builder.setContentTitle(notificationTitle);
+        builder.setContentText(notificationBody);
         builder.setSmallIcon(R.drawable.images);
 
-        Intent intent =new Intent(this,UsersActivity.class);
+        Intent intent =new Intent(this,ViewProfileActivity.class);
+        intent.putExtra("userId",sendersId);
         PendingIntent pendingIntent=PendingIntent.getActivity(this,0,intent,PendingIntent.FLAG_UPDATE_CURRENT);
         builder.setContentIntent(pendingIntent);
 

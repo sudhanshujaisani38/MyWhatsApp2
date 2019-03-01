@@ -19,6 +19,7 @@ import android.view.MenuItem;
 import com.google.firebase.FirebaseApp;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.FirebaseDatabase;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -34,7 +35,7 @@ public class MainActivity extends AppCompatActivity {
         MainPagerAdapter mainPagerAdapter=new MainPagerAdapter(getSupportFragmentManager());
         viewPager=(ViewPager)findViewById(R.id.mainViewPager);
         viewPager.setAdapter(mainPagerAdapter);
-        viewPager.setCurrentItem(1,true);
+        viewPager.setCurrentItem(0,true);
         viewPager.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
             public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
@@ -73,6 +74,8 @@ public class MainActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()){
             case R.id.log_out_main:
+                if(FirebaseAuth.getInstance().getCurrentUser()!=null)
+                    FirebaseDatabase.getInstance().getReference().child("Users").child(firebaseAuth.getCurrentUser().getUid()).child("online").setValue("false");
                 firebaseAuth.signOut();
                 sendToStart();
                 break;
@@ -97,7 +100,18 @@ public class MainActivity extends AppCompatActivity {
         {
             sendToStart();
         }
+        else{
+            FirebaseDatabase.getInstance().getReference().child("Users").child(firebaseUser.getUid()).child("online").setValue("true");
+        }
     }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        if(FirebaseAuth.getInstance().getCurrentUser()!=null)
+        FirebaseDatabase.getInstance().getReference().child("Users").child(firebaseAuth.getCurrentUser().getUid()).child("online").setValue("false");
+    }
+
     void sendToStart(){
         Intent intent=new Intent(this,StartActivity.class);
         startActivity(intent);finish();

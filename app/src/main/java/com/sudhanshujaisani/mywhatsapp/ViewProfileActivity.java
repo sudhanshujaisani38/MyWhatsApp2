@@ -25,7 +25,9 @@ import com.squareup.picasso.Picasso;
 import org.w3c.dom.Text;
 
 import java.text.DateFormat;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Date;
 import java.util.HashMap;
 
@@ -54,7 +56,7 @@ String friendshipState;
         userRef.keepSynced(true);
         selfRef.keepSynced(true);
         final DatabaseReference friendRequestDbRef=FirebaseDatabase.getInstance().getReference().child("Friend Req");
-        final DatabaseReference friendsDbRef=FirebaseDatabase.getInstance().getReference().child("Freiends");
+        final DatabaseReference friendsDbRef=FirebaseDatabase.getInstance().getReference().child("Friends");
         friendRequestDbRef.keepSynced(true);
         friendsDbRef.keepSynced(true);
        userRef.addValueEventListener(new ValueEventListener() {
@@ -180,10 +182,10 @@ String friendshipState;
                    });
                }
            else  if(friendshipState.equals("reqRecieved")){
-                   friendsDbRef.child(selfId).child(userId).setValue(new Date()).addOnCompleteListener(new OnCompleteListener<Void>() {
+                   friendsDbRef.child(selfId).child(userId).child("from").setValue(LocalDate.now().format(DateTimeFormatter.ofPattern("dd/MM/yyyy"))).addOnCompleteListener(new OnCompleteListener<Void>() {
                        @Override
                        public void onComplete(@NonNull Task<Void> task) {
-                           friendRequestDbRef.child(userId).child(selfId).setValue(new Date()).addOnCompleteListener(new OnCompleteListener<Void>() {
+                           friendsDbRef.child(userId).child(selfId).child("from").setValue(LocalDate.now().format(DateTimeFormatter.ofPattern("dd/MM/yyyy"))).addOnCompleteListener(new OnCompleteListener<Void>() {
                                @Override
                                public void onComplete(@NonNull Task<Void> task) {
 

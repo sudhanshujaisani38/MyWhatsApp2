@@ -13,10 +13,11 @@ exports.sendNotification=functions.database.ref('/notifications/{user_id}/{notif
   
 const user_id=context.params.user_id;
 
-  const notification = context.params.notification;
+  const notification_id = context.params.notification_id;
 
 
   console.log('We have a notification to send to: ',user_id);
+
 
   if(!change.after.val()){
   
@@ -24,6 +25,15 @@ const user_id=context.params.user_id;
  
  }
   
+const fromUser=admin.database().ref(`/notifications/`+user_id+`/`+notification_id).once('value');
+return fromUser.then(fromUserResult=>{
+const from_user_id=fromUserResult.val().from;
+console.log('You have a new notification from:',from_user_id);
+
+const fromUserName=admin.database().ref(`/Users/`+from_user_id+`/name`).once('value');
+return fromUserName.then(userResult=>{
+const userName=userResult.val();
+
 const deviceToken=admin.database().ref(`/Users/`+user_id+`/token`).once('value');
  
  return deviceToken.then(result=>{
@@ -34,15 +44,29 @@ const deviceToken=admin.database().ref(`/Users/`+user_id+`/token`).once('value')
     
   notification:{
         title:"Friend Request",
-        body:"You have recieved a new Friend Request",
+ 
+       		body:userName+` has sent you a friend request`
+
             }
+,
+data:{
+from_user_id:from_user_id
+}
     };
    
  return admin.messaging().sendToDevice(token_id,payload).then(response=>{
    
    console.log('Notification sent to',token_id);
+
     });
 
+
   });
+
+
+
+});
+
+});
 
 });
