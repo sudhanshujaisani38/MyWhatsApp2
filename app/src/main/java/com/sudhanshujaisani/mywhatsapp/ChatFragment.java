@@ -1,6 +1,7 @@
 package com.sudhanshujaisani.mywhatsapp;
 
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.Fragment;
@@ -59,22 +60,22 @@ databaseReference.keepSynced(true);
         firebaseRecyclerAdapter=new FirebaseRecyclerAdapter<Friends, ChatUserHolder>(options) {
             @Override
             protected void onBindViewHolder(@NonNull ChatUserHolder holder, int position, @NonNull Friends model) {
-                CardView cardView=holder.cardView1;
+                final CardView cardView=holder.cardView1;
                 final CircleImageView circleImageView=(CircleImageView)cardView.findViewById(R.id.user_detail_image);
                 final TextView displayName=(TextView)cardView.findViewById(R.id.user_detail_display_name);
                 final TextView displayStatus=(TextView)cardView.findViewById(R.id.user_detail_status);
                 final CircleImageView onlineIcon=(CircleImageView)cardView.findViewById(R.id.user_detail_online_icon_imageView);
 
 
-                String userId=getRef(position).getKey();
+                final String userId=getRef(position).getKey();
                 DatabaseReference userRef=FirebaseDatabase.getInstance().getReference().child("Users").child(userId);
                 userRef.keepSynced(true);
                         userRef.addValueEventListener(new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                        String name=dataSnapshot.child("name").getValue().toString();
+                        final String name=dataSnapshot.child("name").getValue().toString();
                         String status=dataSnapshot.child("status").getValue().toString();
-                        String image=dataSnapshot.child("thumb").getValue().toString();
+                        final String image=dataSnapshot.child("thumb").getValue().toString();
                         String online=dataSnapshot.child("online").getValue().toString();
 
 
@@ -89,6 +90,18 @@ databaseReference.keepSynced(true);
                         else
                             onlineIcon.setVisibility(View.INVISIBLE);
 
+                        cardView.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                Intent intent=new Intent(getContext(),ChatActivity.class);
+                                intent.putExtra("user_Name",name);
+                                intent.putExtra("userId",userId);
+                                intent.putExtra("image",image);
+                                startActivity(intent);
+
+                            }
+                        });
+
                     }
 
                     @Override
@@ -97,6 +110,7 @@ databaseReference.keepSynced(true);
                     }
                 }
                 );
+
             }
 
             @NonNull
