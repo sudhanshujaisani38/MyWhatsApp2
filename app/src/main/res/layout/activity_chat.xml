@@ -4,25 +4,43 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ChatActivity">
+    tools:context=".ChatActivity"
+    android:background="@android:color/darker_gray">
 
     <include
         layout="@layout/layout_toolbar"
         android:id="@+id/toolbar_chat_activity"
         />
 
+    <ImageButton
+        android:id="@+id/send_image_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginBottom="16dp"
+        android:background="@drawable/message_box_sent"
+        android:backgroundTint="@android:color/white"
+        android:padding="4dp"
+        android:src="@android:drawable/ic_menu_gallery"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/editText_message_content"
+        app:layout_constraintStart_toStartOf="parent" />
+
     <EditText
         android:id="@+id/editText_message_content"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
+        android:layout_marginStart="8dp"
         android:layout_marginBottom="16dp"
+        android:background="@drawable/message_box_recieved"
+        android:backgroundTint="#ffffff"
         android:ems="10"
-        android:inputType="textPersonName"
-        android:text="Name"
+        android:hint="Type a message.."
+        android:inputType="textMultiLine"
+        android:padding="8dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/button_send"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintStart_toEndOf="@+id/send_image_button" />
 
     <ImageButton
         android:id="@+id/button_send"
@@ -31,12 +49,31 @@
         android:layout_marginStart="8dp"
         android:layout_marginEnd="8dp"
         android:padding="4dp"
-        android:background="@color/colorPrimary"
+        android:background="@drawable/message_box_recieved"
+        android:backgroundTint="@color/colorPrimary"
         app:layout_constraintBottom_toBottomOf="@+id/editText_message_content"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/editText_message_content"
         app:layout_constraintTop_toTopOf="@+id/editText_message_content"
         app:srcCompat="@android:drawable/ic_menu_send" />
+
+    <android.support.v4.widget.SwipeRefreshLayout
+        android:id="@+id/swipeRefreshLayout"
+        android:layout_width="wrap_content"
+        android:layout_height="0dp"
+        android:layout_marginBottom="4dp"
+        app:layout_constraintBottom_toTopOf="@+id/editText_message_content"
+        app:layout_constraintTop_toBottomOf="@+id/toolbar_chat_activity">
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/recycler_view_for_messages"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            app:layout_constraintBottom_toTopOf="@+id/editText_message_content"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/toolbar_chat_activity" />
+    </android.support.v4.widget.SwipeRefreshLayout>
 
 
 </android.support.constraint.ConstraintLayout>

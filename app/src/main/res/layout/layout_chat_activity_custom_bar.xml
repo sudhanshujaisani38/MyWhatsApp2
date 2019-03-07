@@ -12,9 +12,8 @@
     <de.hdodenhof.circleimageview.CircleImageView
         android:id="@+id/image_toolbar"
         android:layout_width="36dp"
-        android:layout_height="36dp"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="8dp"
+        android:layout_height="48dp"
+        android:layout_marginTop="4dp"
         android:src="@drawable/images"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -35,11 +34,11 @@
         android:id="@+id/textView_lastSeen"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
+        android:layout_marginTop="4dp"
         android:layout_marginEnd="8dp"
         android:text="Last Seen"
         android:textColor="#ffffff"
-        android:textSize="10dp"
+        android:textSize="13dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="@+id/textView_name_chat_activity"
         app:layout_constraintTop_toBottomOf="@+id/textView_name_chat_activity" />
